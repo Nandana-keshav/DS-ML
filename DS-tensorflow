@@ -1,0 +1,39 @@
+import tensorflow as tf
+from tensorflow.keras import layers, models
+# Load dataset (MNIST digits: 28x28 grayscale images of digits 0–9)
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+# Normalize pixel values (0–255) to (0–1)
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+# Build a simple neural network
+model = models.Sequential([
+layers.Flatten(input_shape=(28, 28)), # Flatten 28x28 images into 784 inputs
+layers.Dense(128, activation='relu'), # Hidden layer with 128 neurons
+layers.Dense(10, activation='softmax') # Output layer (10 classes: digits 0–9)
+])
+# Compile the model
+model.compile(optimizer='adam',
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy'])
+# Train the model
+model.fit(x_train, y_train, epochs=5, validation_data=(x_test, y_test))
+# Evaluate on test data
+test_loss, test_acc = model.evaluate(x_test, y_test, verbose=2)
+print("\nTest accuracy:", test_acc)
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+11490434/11490434 ━━━━━━━━━━━━━━━━━━━━ 0s 0us/step
+/usr/local/lib/python3.12/dist-packages/keras/src/layers/reshaping/flatten.py:37: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(**kwargs)
+Epoch 1/5
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 10s 5ms/step - accuracy: 0.8777 - loss: 0.4352 - val_accuracy: 0.9579 - val_loss: 0.1373
+Epoch 2/5
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 8s 4ms/step - accuracy: 0.9664 - loss: 0.1159 - val_accuracy: 0.9680 - val_loss: 0.0986
+Epoch 3/5
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 10s 5ms/step - accuracy: 0.9771 - loss: 0.0775 - val_accuracy: 0.9753 - val_loss: 0.0811
+Epoch 4/5
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 10s 5ms/step - accuracy: 0.9828 - loss: 0.0553 - val_accuracy: 0.9783 - val_loss: 0.0732
+Epoch 5/5
+1875/1875 ━━━━━━━━━━━━━━━━━━━━ 10s 5ms/step - accuracy: 0.9876 - loss: 0.0424 - val_accuracy: 0.9763 - val_loss: 0.0770
+313/313 - 1s - 2ms/step - accuracy: 0.9763 - loss: 0.0770
+
+Test accuracy: 0.9763000011444092
